@@ -235,6 +235,8 @@ class Pulse extends StatefulWidget {
   final Function(AnimationController)? controller;
   final bool manualTrigger;
   final bool animate;
+  final double minValue;
+  final double maxValue;
 
   Pulse(
       {key,
@@ -244,7 +246,9 @@ class Pulse extends StatefulWidget {
       this.infinite = false,
       this.controller,
       this.manualTrigger = false,
-      this.animate = true})
+      this.animate = true,
+      this.minValue = 1,
+      this.maxValue = 1.5})
       : super(key: key) {
     if (manualTrigger == true && controller == null) {
       throw FlutterError('If you want to use manualTrigger:true, \n\n'
@@ -276,11 +280,11 @@ class _PulseState extends State<Pulse> with SingleTickerProviderStateMixin {
 
     controller = AnimationController(duration: widget.duration, vsync: this);
 
-    animationInc = Tween<double>(begin: 1, end: 1.5).animate(CurvedAnimation(
+    animationInc = Tween<double>(begin: widget.minValue, end: widget.maxValue).animate(CurvedAnimation(
         parent: controller!,
         curve: const Interval(0, 0.5, curve: Curves.easeOut)));
 
-    animationDec = Tween<double>(begin: 1.5, end: 1).animate(CurvedAnimation(
+    animationDec = Tween<double>(begin: widget.maxValue, end: widget.minValue).animate(CurvedAnimation(
         parent: controller!,
         curve: const Interval(0.5, 1, curve: Curves.easeIn)));
 
